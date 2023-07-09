@@ -1,6 +1,6 @@
 ﻿namespace TeslaBMSReader
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             batEmptyBox1 = new PictureBox();
             batEmptyBox2 = new PictureBox();
             batEmptyBox3 = new PictureBox();
@@ -50,6 +51,23 @@
             MaximumVal = new Label();
             MinimumVal = new Label();
             DifferenceVal = new Label();
+            BatVoltage = new Label();
+            BatTs1 = new Label();
+            BatTs2 = new Label();
+            groupBox1 = new GroupBox();
+            groupBox2 = new GroupBox();
+            menuStrip1 = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            setupToolStripMenuItem = new ToolStripMenuItem();
+            seveToFileToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
+            TimerEn = new CheckBox();
+            groupBox3 = new GroupBox();
+            checkBox1 = new CheckBox();
+            BaIdLabel = new Label();
+            timer1 = new System.Windows.Forms.Timer(components);
+            TimeLbl = new Label();
             ((System.ComponentModel.ISupportInitialize)batEmptyBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)batEmptyBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)batEmptyBox3).BeginInit();
@@ -62,6 +80,10 @@
             ((System.ComponentModel.ISupportInitialize)batFullBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)batFullBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)batFullBox1).BeginInit();
+            groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            menuStrip1.SuspendLayout();
+            groupBox3.SuspendLayout();
             SuspendLayout();
             // 
             // batEmptyBox1
@@ -153,7 +175,6 @@
             batFullBox3.Size = new Size(107, 200);
             batFullBox3.TabIndex = 8;
             batFullBox3.TabStop = false;
-            batFullBox3.Click += batFullBox3_Click;
             // 
             // batFullBox2
             // 
@@ -241,17 +262,17 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(506, 381);
+            textBox1.Location = new Point(9, 437);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(175, 127);
+            textBox1.Size = new Size(173, 155);
             textBox1.TabIndex = 18;
             // 
             // MaximumVal
             // 
             MaximumVal.AutoSize = true;
             MaximumVal.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            MaximumVal.Location = new Point(9, 333);
+            MaximumVal.Location = new Point(6, 19);
             MaximumVal.Name = "MaximumVal";
             MaximumVal.Size = new Size(84, 32);
             MaximumVal.TabIndex = 19;
@@ -261,7 +282,7 @@
             // 
             MinimumVal.AutoSize = true;
             MinimumVal.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            MinimumVal.Location = new Point(9, 365);
+            MinimumVal.Location = new Point(6, 51);
             MinimumVal.Name = "MinimumVal";
             MinimumVal.Size = new Size(78, 32);
             MinimumVal.TabIndex = 20;
@@ -271,20 +292,175 @@
             // 
             DifferenceVal.AutoSize = true;
             DifferenceVal.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            DifferenceVal.Location = new Point(9, 397);
+            DifferenceVal.Location = new Point(6, 83);
             DifferenceVal.Name = "DifferenceVal";
             DifferenceVal.Size = new Size(78, 32);
             DifferenceVal.TabIndex = 21;
             DifferenceVal.Text = "DIFF: ";
             // 
-            // Form1
+            // BatVoltage
+            // 
+            BatVoltage.AutoSize = true;
+            BatVoltage.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            BatVoltage.Location = new Point(6, 19);
+            BatVoltage.Name = "BatVoltage";
+            BatVoltage.Size = new Size(72, 32);
+            BatVoltage.TabIndex = 22;
+            BatVoltage.Text = "BAT: ";
+            // 
+            // BatTs1
+            // 
+            BatTs1.AutoSize = true;
+            BatTs1.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            BatTs1.Location = new Point(6, 51);
+            BatTs1.Name = "BatTs1";
+            BatTs1.Size = new Size(69, 32);
+            BatTs1.TabIndex = 23;
+            BatTs1.Text = "TS1: ";
+            // 
+            // BatTs2
+            // 
+            BatTs2.AutoSize = true;
+            BatTs2.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            BatTs2.Location = new Point(6, 83);
+            BatTs2.Name = "BatTs2";
+            BatTs2.Size = new Size(69, 32);
+            BatTs2.TabIndex = 24;
+            BatTs2.Text = "TS2: ";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(MaximumVal);
+            groupBox1.Controls.Add(MinimumVal);
+            groupBox1.Controls.Add(DifferenceVal);
+            groupBox1.Location = new Point(9, 307);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(220, 124);
+            groupBox1.TabIndex = 25;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Differences";
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(BatVoltage);
+            groupBox2.Controls.Add(BatTs1);
+            groupBox2.Controls.Add(BatTs2);
+            groupBox2.Location = new Point(235, 307);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(220, 124);
+            groupBox2.TabIndex = 26;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Common data";
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, aboutToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(692, 24);
+            menuStrip1.TabIndex = 27;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { setupToolStripMenuItem, seveToFileToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // setupToolStripMenuItem
+            // 
+            setupToolStripMenuItem.Name = "setupToolStripMenuItem";
+            setupToolStripMenuItem.Size = new Size(131, 22);
+            setupToolStripMenuItem.Text = "Setup";
+            // 
+            // seveToFileToolStripMenuItem
+            // 
+            seveToFileToolStripMenuItem.Name = "seveToFileToolStripMenuItem";
+            seveToFileToolStripMenuItem.Size = new Size(131, 22);
+            seveToFileToolStripMenuItem.Text = "Seve to file";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem2 });
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(52, 20);
+            aboutToolStripMenuItem.Text = "About";
+            // 
+            // toolStripMenuItem2
+            // 
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new Size(86, 22);
+            toolStripMenuItem2.Text = "#?";
+            // 
+            // TimerEn
+            // 
+            TimerEn.AutoSize = true;
+            TimerEn.Location = new Point(9, 22);
+            TimerEn.Name = "TimerEn";
+            TimerEn.Size = new Size(127, 19);
+            TimerEn.TabIndex = 28;
+            TimerEn.Text = "Continue read data";
+            TimerEn.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(checkBox1);
+            groupBox3.Controls.Add(TimerEn);
+            groupBox3.Location = new Point(461, 307);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(220, 124);
+            groupBox3.TabIndex = 29;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Controlls";
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(9, 47);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(136, 19);
+            checkBox1.TabIndex = 29;
+            checkBox1.Text = "Start BMS calibration";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // BaIdLabel
+            // 
+            BaIdLabel.AutoSize = true;
+            BaIdLabel.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            BaIdLabel.ForeColor = SystemColors.Highlight;
+            BaIdLabel.Location = new Point(9, 25);
+            BaIdLabel.Name = "BaIdLabel";
+            BaIdLabel.Size = new Size(141, 30);
+            BaIdLabel.TabIndex = 25;
+            BaIdLabel.Text = "BMS ID: N/A ";
+            // 
+            // timer1
+            // 
+            timer1.Interval = 1000;
+            timer1.Tick += timer1_Tick;
+            // 
+            // TimeLbl
+            // 
+            TimeLbl.AutoSize = true;
+            TimeLbl.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            TimeLbl.ForeColor = SystemColors.Highlight;
+            TimeLbl.Location = new Point(476, 25);
+            TimeLbl.Name = "TimeLbl";
+            TimeLbl.Size = new Size(56, 30);
+            TimeLbl.TabIndex = 31;
+            TimeLbl.Text = "time";
+            // 
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(693, 520);
-            Controls.Add(DifferenceVal);
-            Controls.Add(MinimumVal);
-            Controls.Add(MaximumVal);
+            ClientSize = new Size(692, 595);
+            Controls.Add(TimeLbl);
+            Controls.Add(BaIdLabel);
+            Controls.Add(groupBox3);
+            Controls.Add(groupBox2);
+            Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(CellVoltage6);
             Controls.Add(CellVoltage5);
@@ -304,9 +480,13 @@
             Controls.Add(batEmptyBox3);
             Controls.Add(batEmptyBox2);
             Controls.Add(batEmptyBox1);
-            Name = "Form1";
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
+            MaximumSize = new Size(708, 634);
+            MinimumSize = new Size(708, 472);
+            Name = "MainForm";
             Text = "Tesla BMB Single cell reader";
-            Load += Form1_Load;
+            Load += MainForm_Load;
             ((System.ComponentModel.ISupportInitialize)batEmptyBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)batEmptyBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)batEmptyBox3).EndInit();
@@ -319,6 +499,14 @@
             ((System.ComponentModel.ISupportInitialize)batFullBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)batFullBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)batFullBox1).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -347,5 +535,22 @@
         private Label MaximumVal;
         private Label MinimumVal;
         private Label DifferenceVal;
+        private Label BatVoltage;
+        private Label BatTs1;
+        private Label BatTs2;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem setupToolStripMenuItem;
+        private ToolStripMenuItem seveToFileToolStripMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private CheckBox TimerEn;
+        private GroupBox groupBox3;
+        private CheckBox checkBox1;
+        private Label BaIdLabel;
+        private System.Windows.Forms.Timer timer1;
+        private Label TimeLbl;
     }
 }

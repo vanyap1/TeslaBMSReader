@@ -1,15 +1,17 @@
+using System;
+using System.Configuration;
 using System.Reflection.Metadata.Ecma335;
 using System.Linq;
 
 namespace TeslaBMSReader
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        int[] cells_voltage = new int[6];
-        int[] cells_percent = new int[6];
+        //int[] cells_voltage = new int[6];
+        //int[] cells_percent = new int[6];
 
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -17,13 +19,32 @@ namespace TeslaBMSReader
 
 
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             textBox1.AcceptsReturn = true;
 
 
             int[] cells_voltage = { 3761, 4092, 3780, 4200, 4000, 3825 };
             int[] cells_percent = { 0 };
+            double[] aditional_data = { 22261, 252, 251 };                                       //Battery voltage, TS1, TS2 
+
+            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
+            configFileMap.ExeConfigFilename = "config.xml";
+
+            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+            timer1.Enabled = true;
+
+
+
+            string SerialPort = config.AppSettings.Settings["SerialPort"].Value;
+            string SerialBaud = config.AppSettings.Settings["BaudRate"].Value;
+            string OwnerInfo = config.AppSettings.Settings["OwnerInfo"].Value;
+
+            textBox1.AppendText(SerialPort + Environment.NewLine);
+            textBox1.AppendText(SerialBaud + Environment.NewLine);
+            textBox1.AppendText(OwnerInfo + Environment.NewLine);
+
+
 
 
 
@@ -72,6 +93,9 @@ namespace TeslaBMSReader
             MaximumVal.Text = "MAX: " + cells_voltage.Max() + "mV";
             MinimumVal.Text = "MIN: " + cells_voltage.Min() + "mV";
             DifferenceVal.Text = "DIFF: " + (cells_voltage.Max() - cells_voltage.Min()) + "mV";
+            BatVoltage.Text = "BAT: " + (aditional_data[0] / 1000).ToString("F1") + "V";
+            BatTs1.Text = "TS1: " + (aditional_data[1] / 10).ToString("F1") + "°C";
+            BatTs2.Text = "TS2: " + (aditional_data[2] / 10).ToString("F1") + "°C";
 
         }
 
@@ -91,9 +115,9 @@ namespace TeslaBMSReader
             return voltage;
         }
 
-        private void batFullBox3_Click(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-
+            TimeLbl.Text = DateTime.Now.ToString();
         }
     }
 }

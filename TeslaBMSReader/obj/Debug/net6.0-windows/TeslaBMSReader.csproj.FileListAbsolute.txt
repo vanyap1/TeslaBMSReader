@@ -4,7 +4,6 @@ G:\GIT\TeslaBMSReader\TeslaBMSReader\bin\Debug\net6.0-windows\TeslaBMSReader.run
 G:\GIT\TeslaBMSReader\TeslaBMSReader\bin\Debug\net6.0-windows\TeslaBMSReader.dll
 G:\GIT\TeslaBMSReader\TeslaBMSReader\bin\Debug\net6.0-windows\TeslaBMSReader.pdb
 G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.csproj.AssemblyReference.cache
-G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.Form1.resources
 G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.csproj.GenerateResource.cache
 G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.GeneratedMSBuildEditorConfig.editorconfig
 G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.AssemblyInfoInputs.cache
@@ -16,3 +15,4 @@ G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.pdb
 G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.genruntimeconfig.cache
 G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\ref\TeslaBMSReader.dll
 G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.Properties.Resources.resources
+G:\GIT\TeslaBMSReader\TeslaBMSReader\obj\Debug\net6.0-windows\TeslaBMSReader.MainForm.resources
