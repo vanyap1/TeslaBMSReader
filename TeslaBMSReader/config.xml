@@ -2,7 +2,7 @@
 <configuration>
   <appSettings>
     <add key="SerialPort" value="Com5"/>
-    <add key="Baudrate" value="500000"/>
+    <add key="Baudrate" value="612500"/>
     <add key="OwnerInfo" value="Ivan Prints (https://github.com/vanyap1)"/>
   </appSettings>
 </configuration>

@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "zMWrmPdJ+9CMA6q8VVmFIKIXFEZlO/y1GqBl92TTIhdXHXq3W4jbQOwcJiwxzv8+NcrYBtHTy9wjxS9qowSJsw==",
+  "dgSpecHash": "iSTVU8TswZejbmsIHy52VrHlgHNe9wsYLUa9vLQg/gsFsA3EkUitkD/BAIERceEemuKqCIE8Xyz7lFqHzBo8eQ==",
   "success": true,
   "projectFilePath": "G:\\GIT\\TeslaBMSReader\\TeslaBMSReader\\TeslaBMSReader.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\princ\\.nuget\\packages\\runtime.linux-arm.runtime.native.system.io.ports\\7.0.0\\runtime.linux-arm.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\princ\\.nuget\\packages\\runtime.linux-arm64.runtime.native.system.io.ports\\7.0.0\\runtime.linux-arm64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\princ\\.nuget\\packages\\runtime.linux-x64.runtime.native.system.io.ports\\7.0.0\\runtime.linux-x64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\princ\\.nuget\\packages\\runtime.native.system.io.ports\\7.0.0\\runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\princ\\.nuget\\packages\\runtime.osx-arm64.runtime.native.system.io.ports\\7.0.0\\runtime.osx-arm64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\princ\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\7.0.0\\runtime.osx-x64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\princ\\.nuget\\packages\\system.io.ports\\7.0.0\\system.io.ports.7.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

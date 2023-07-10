@@ -64,6 +64,7 @@
             toolStripMenuItem2 = new ToolStripMenuItem();
             TimerEn = new CheckBox();
             groupBox3 = new GroupBox();
+            button1 = new Button();
             checkBox1 = new CheckBox();
             BaIdLabel = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
@@ -187,6 +188,7 @@
             // 
             // batFullBox1
             // 
+            batFullBox1.BackColor = SystemColors.Menu;
             batFullBox1.BackgroundImage = Properties.Resources.bat_full;
             batFullBox1.Location = new Point(9, 60);
             batFullBox1.Name = "batFullBox1";
@@ -197,75 +199,69 @@
             // CellVoltage1
             // 
             CellVoltage1.AutoSize = true;
-            CellVoltage1.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point);
-            CellVoltage1.Location = new Point(29, 263);
+            CellVoltage1.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            CellVoltage1.Location = new Point(15, 263);
             CellVoltage1.Name = "CellVoltage1";
-            CellVoltage1.Size = new Size(66, 41);
+            CellVoltage1.Size = new Size(61, 37);
             CellVoltage1.TabIndex = 12;
             CellVoltage1.Text = "null";
-            CellVoltage1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // CellVoltage2
             // 
             CellVoltage2.AutoSize = true;
-            CellVoltage2.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point);
-            CellVoltage2.Location = new Point(142, 263);
+            CellVoltage2.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
+            CellVoltage2.Location = new Point(122, 263);
             CellVoltage2.Name = "CellVoltage2";
-            CellVoltage2.Size = new Size(66, 41);
+            CellVoltage2.Size = new Size(61, 37);
             CellVoltage2.TabIndex = 13;
             CellVoltage2.Text = "null";
-            CellVoltage2.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // CellVoltage3
             // 
             CellVoltage3.AutoSize = true;
-            CellVoltage3.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point);
-            CellVoltage3.Location = new Point(255, 263);
+            CellVoltage3.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
+            CellVoltage3.Location = new Point(241, 263);
             CellVoltage3.Name = "CellVoltage3";
-            CellVoltage3.Size = new Size(66, 41);
+            CellVoltage3.Size = new Size(61, 37);
             CellVoltage3.TabIndex = 14;
             CellVoltage3.Text = "null";
-            CellVoltage3.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // CellVoltage4
             // 
             CellVoltage4.AutoSize = true;
-            CellVoltage4.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point);
-            CellVoltage4.Location = new Point(370, 263);
+            CellVoltage4.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
+            CellVoltage4.Location = new Point(348, 263);
             CellVoltage4.Name = "CellVoltage4";
-            CellVoltage4.Size = new Size(66, 41);
+            CellVoltage4.Size = new Size(61, 37);
             CellVoltage4.TabIndex = 15;
             CellVoltage4.Text = "null";
-            CellVoltage4.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // CellVoltage5
             // 
             CellVoltage5.AutoSize = true;
-            CellVoltage5.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point);
-            CellVoltage5.Location = new Point(484, 263);
+            CellVoltage5.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
+            CellVoltage5.Location = new Point(466, 263);
             CellVoltage5.Name = "CellVoltage5";
-            CellVoltage5.Size = new Size(66, 41);
+            CellVoltage5.Size = new Size(61, 37);
             CellVoltage5.TabIndex = 16;
             CellVoltage5.Text = "null";
-            CellVoltage5.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // CellVoltage6
             // 
             CellVoltage6.AutoSize = true;
-            CellVoltage6.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point);
-            CellVoltage6.Location = new Point(596, 263);
+            CellVoltage6.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
+            CellVoltage6.Location = new Point(574, 263);
             CellVoltage6.Name = "CellVoltage6";
-            CellVoltage6.Size = new Size(66, 41);
+            CellVoltage6.Size = new Size(61, 37);
             CellVoltage6.TabIndex = 17;
             CellVoltage6.Text = "null";
-            CellVoltage6.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(9, 437);
+            textBox1.Location = new Point(12, 437);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(173, 155);
+            textBox1.Size = new Size(668, 155);
             textBox1.TabIndex = 18;
             // 
             // MaximumVal
@@ -405,6 +401,7 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(button1);
             groupBox3.Controls.Add(checkBox1);
             groupBox3.Controls.Add(TimerEn);
             groupBox3.Location = new Point(461, 307);
@@ -413,6 +410,16 @@
             groupBox3.TabIndex = 29;
             groupBox3.TabStop = false;
             groupBox3.Text = "Controlls";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(9, 72);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 30;
+            button1.Text = "Init reader";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // checkBox1
             // 
@@ -552,5 +559,6 @@
         private Label BaIdLabel;
         private System.Windows.Forms.Timer timer1;
         private Label TimeLbl;
+        private Button button1;
     }
 }
