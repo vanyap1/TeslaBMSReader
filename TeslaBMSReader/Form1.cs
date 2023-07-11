@@ -36,9 +36,7 @@ namespace TeslaBMSReader
             textBox1.AcceptsReturn = true;
 
 
-            int[] cells_voltage = { 3880, 0, 0, 0, 0, 0 };
-            int[] cells_percent = { 0, 0, 0, 0, 0, 0 };
-            double[] aditional_data = { 0, 0, 0 };                                       //Battery voltage, TS1, TS2 
+           
 
             ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
             configFileMap.ExeConfigFilename = "config.xml";
@@ -72,39 +70,7 @@ namespace TeslaBMSReader
             batFullBox5.BackgroundImage = Properties.Resources.bat_empty;
             batFullBox6.BackgroundImage = Properties.Resources.bat_empty;
 
-            CellVoltage1.Text = cells_voltage[0].ToString("D4") + "mV";
-            CellVoltage2.Text = cells_voltage[1].ToString("D4") + "mV";
-            CellVoltage3.Text = cells_voltage[2].ToString("D4") + "mV";
-            CellVoltage4.Text = cells_voltage[3].ToString("D4") + "mV";
-            CellVoltage5.Text = cells_voltage[4].ToString("D4") + "mV";
-            CellVoltage6.Text = cells_voltage[5].ToString("D4") + "mV";
-
-
-
-
-
-            for (int i = 0; i <= 5; i++)
-            {
-                textBox1.AppendText(cells_voltage[i].ToString() + "; " + PercentCalc(cells_voltage[i]).ToString() + Environment.NewLine);
-            }
-
-            batFullBox1.Height = batEmptyBox1.Height - PercentCalc(cells_voltage[0]) * 2;
-            batFullBox2.Height = batEmptyBox1.Height - PercentCalc(cells_voltage[1]) * 2;
-            batFullBox3.Height = batEmptyBox1.Height - PercentCalc(cells_voltage[2]) * 2;
-            batFullBox4.Height = batEmptyBox1.Height - PercentCalc(cells_voltage[3]) * 2;
-            batFullBox5.Height = batEmptyBox1.Height - PercentCalc(cells_voltage[4]) * 2;
-            batFullBox6.Height = batEmptyBox1.Height - PercentCalc(cells_voltage[5]) * 2;
-
-            MaximumVal.Text = "MAX: " + cells_voltage.Max() + "mV";
-            MinimumVal.Text = "MIN: " + cells_voltage.Min() + "mV";
-            DifferenceVal.Text = "DIFF: " + (cells_voltage.Max() - cells_voltage.Min()) + "mV";
-
-            if (aditional_data[0] != 0)
-                BatVoltage.Text = "BAT: " + (aditional_data[0] / 1000).ToString("F1") + "V";
-            if (aditional_data[1] != 0)
-                BatTs1.Text = "TS1: " + (aditional_data[1] / 10).ToString("F1") + "°C";
-            if (aditional_data[2] != 0)
-                BatTs2.Text = "TS2: " + (aditional_data[2] / 10).ToString("F1") + "°C";
+            
 
         }
 
@@ -136,6 +102,10 @@ namespace TeslaBMSReader
             byte[] data2 = { 1, 48, 61 };// crc - 247   |  1 48 61 > 2 48 61 > 3 48 61 + 247
             byte[] data3 = { 1, 49, 3 };// crc - 88     |  1 49 3 > 2 49 3 > 3 49 3 + 88
 
+            int[] cells_voltage = { 3880, 0, 0, 0, 0, 0 };
+            double[] aditional_data = { 0, 0, 0 };                                       //Battery voltage, TS1, TS2 
+
+
             byte[] startADC = { 1, 52, 1 };// crc - 88     |  > 3 52 1 23
             byte[] readADC = { 1, 1, 17 };// crc - 88     |  > 3 1 17 223
 
@@ -146,16 +116,31 @@ namespace TeslaBMSReader
             string line3 = "";
             string line4 = "";
 
-
-
-            line1 = line1 + BitConverter.ToString(serialTx(startADC, true)) + ";";   //127 60 165 58   - 87
+            byte[] battery_read_data = serialTx(startADC, true);
+            
+            line1 = line1 + BitConverter.ToString(battery_read_data) + ";";   //127 60 165 58   - 87
             Thread.Sleep(25);
-            line2 = line2 + BitConverter.ToString(serialTx(readADC, false)) + ";";
-            //line2 = line2 + serialTx(data1).ToString() + ";";  //1 59 199 94     - 
-            //line3 = line3 + serialTx(data2).ToString() + ";";  //3 48 61 158     -
-            //line4 = line4 + serialTx(data3).ToString() + ";";  //3 49 3 166      - 
+            battery_read_data = serialTx(readADC, false);
+            line2 = line2 + BitConverter.ToString(battery_read_data) + ";";
 
-            //textBox1.AppendText(cells_voltage[i].ToString() + "; " + PercentCalc(cells_voltage[i]).ToString() + Environment.NewLine);
+            if ((battery_read_data[0] == 0x02 && battery_read_data[1] == 0x01 && battery_read_data[2] == 0x11)) //02-01-11
+            {
+                int[] numbers = { 5, 7, 9, 11, 13, 15 };
+                byte cellIndex = 0;
+                foreach (int n in numbers)
+                {
+                    double voltage = Math.Round((battery_read_data[n] * 256 + battery_read_data[n + 1]) * 6.250 / 16383, 3);
+                    cells_voltage[cellIndex] = Convert.ToInt32(voltage * 1000);
+                    cellIndex++;
+
+                    line3 = line3 + "Cell voltage: " + voltage.ToString("F3") + Environment.NewLine;
+                }
+                drav_display(cells_voltage, aditional_data);
+            }
+            else
+            {
+                line3 = "something else";
+            }//
 
 
             textBox1.Text = line1 + Environment.NewLine;
@@ -163,15 +148,41 @@ namespace TeslaBMSReader
             textBox1.AppendText(line3 + Environment.NewLine);
             textBox1.AppendText(line4 + Environment.NewLine);
 
+        }
 
-            //byte[] data = await ReadDataFromPortAsync();
-            //if (data != null)
+        public void drav_display(int[] cells_data , double[] extra_data)
+        {
+            CellVoltage1.Text = cells_data[0].ToString("D4") + "mV";
+            CellVoltage2.Text = cells_data[1].ToString("D4") + "mV";
+            CellVoltage3.Text = cells_data[2].ToString("D4") + "mV";
+            CellVoltage4.Text = cells_data[3].ToString("D4") + "mV";
+            CellVoltage5.Text = cells_data[4].ToString("D4") + "mV";
+            CellVoltage6.Text = cells_data[5].ToString("D4") + "mV";
+
+            //for (int i = 0; i <= 5; i++)
             //{
-            //    // Використовуйте отримані дані за потребою
+            //    textBox1.AppendText(cells_data[i].ToString() + "; " + PercentCalc(cells_data[i]).ToString() + Environment.NewLine);
             //}
 
+            batFullBox1.Height = batEmptyBox1.Height - PercentCalc(cells_data[0]) * 2;
+            batFullBox2.Height = batEmptyBox1.Height - PercentCalc(cells_data[1]) * 2;
+            batFullBox3.Height = batEmptyBox1.Height - PercentCalc(cells_data[2]) * 2;
+            batFullBox4.Height = batEmptyBox1.Height - PercentCalc(cells_data[3]) * 2;
+            batFullBox5.Height = batEmptyBox1.Height - PercentCalc(cells_data[4]) * 2;
+            batFullBox6.Height = batEmptyBox1.Height - PercentCalc(cells_data[5]) * 2;
 
+            MaximumVal.Text = "MAX: " + cells_data.Max() + "mV";
+            MinimumVal.Text = "MIN: " + cells_data.Min() + "mV";
+            DifferenceVal.Text = "DIFF: " + (cells_data.Max() - cells_data.Min()) + "mV";
+
+            if (extra_data[0] != 0)
+                BatVoltage.Text = "BAT: " + (extra_data[0] / 1000).ToString("F1") + "V";
+            if (extra_data[1] != 0)
+                BatTs1.Text = "TS1: " + (extra_data[1] / 10).ToString("F1") + "°C";
+            if (extra_data[2] != 0)
+                BatTs2.Text = "TS2: " + (extra_data[2] / 10).ToString("F1") + "°C";
         }
+
 
         private byte[] serialTx(byte[] data, bool need_crc)
         {
@@ -189,6 +200,8 @@ namespace TeslaBMSReader
             return WriteDataToPort(data);
 
         }
+
+
         private byte CalculateCRC8(byte[] data)
         {
             {
