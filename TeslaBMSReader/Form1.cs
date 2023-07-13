@@ -1,11 +1,5 @@
-using System;
 using System.Configuration;
-using System.Reflection.Metadata.Ecma335;
-using System.Linq;
 using System.IO.Ports;
-using System.Threading;
-using System.Collections;
-
 
 namespace TeslaBMSReader
 {
@@ -16,27 +10,34 @@ namespace TeslaBMSReader
         //int[] cells_voltage = new int[6];
         //int[] cells_percent = new int[6];
         private SerialPort _port;
+        public byte BROADCAST = 0x3F;
+        public byte ADDRESS_CONTROL = 0x3b;
+        public byte ADC_CONTROL = 0x30;
+        public byte ADC_CONVERT = 0x34;
+        public byte IO_CONRTOL = 0x31;
+        public byte ALERT_STATUS = 0x20;
+        public byte FAULT_STATUS = 0x21;
+        public byte CB_TIME = 0x33;
+        public byte CB_CTRL = 0x32;
+        public byte RESET = 0x3C;
+
+        public byte bat_pack_address = 0x01;
+        public byte write_modifier = 0x80;
+        public int disbalanceCriticalValue = 0;
+        public int cellMaxVoltage = 0;
+        public int cellMinVoltage = 0;
+        public int autorunProcess = 0;
+        public int readElapseTime = 0;
+        public string SerialPort = "";
+        public string SerialBaud = "";
 
 
         public MainForm()
         {
             InitializeComponent();
         }
-
-
-
-
         private void MainForm_Load(object sender, EventArgs e)
         {
-
-
-
-
-
-            textBox1.AcceptsReturn = true;
-
-
-           
 
             ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
             configFileMap.ExeConfigFilename = "config.xml";
@@ -44,17 +45,20 @@ namespace TeslaBMSReader
             Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
             timer1.Enabled = true;
 
-            string SerialPort = config.AppSettings.Settings["SerialPort"].Value;
-            string SerialBaud = config.AppSettings.Settings["BaudRate"].Value;
+            SerialPort = config.AppSettings.Settings["SerialPort"].Value;
+            SerialBaud = config.AppSettings.Settings["BaudRate"].Value;
+
             string OwnerInfo = config.AppSettings.Settings["OwnerInfo"].Value;
+
+            disbalanceCriticalValue = Convert.ToInt32(config.AppSettings.Settings["disbalanceCriticalValue"].Value);
+            cellMaxVoltage = Convert.ToInt32(config.AppSettings.Settings["cellMaxVoltage"].Value);
+            cellMinVoltage = Convert.ToInt32(config.AppSettings.Settings["cellMinVoltage"].Value);
+            autorunProcess = Convert.ToInt32(config.AppSettings.Settings["autorun"].Value);
+            readElapseTime = Convert.ToInt32(config.AppSettings.Settings["readElapseTime"].Value);
 
             _port = new SerialPort(SerialPort, int.Parse(SerialBaud));
             _port.ReadBufferSize = 1024;
-            OpenPort();
-
-            textBox1.AppendText(SerialPort + Environment.NewLine);
-            textBox1.AppendText(SerialBaud + Environment.NewLine);
-            textBox1.AppendText(OwnerInfo + Environment.NewLine);
+            //OpenPort();
 
             batEmptyBox1.BackgroundImage = Properties.Resources.bat_full;
             batEmptyBox2.BackgroundImage = Properties.Resources.bat_full;
@@ -70,8 +74,22 @@ namespace TeslaBMSReader
             batFullBox5.BackgroundImage = Properties.Resources.bat_empty;
             batFullBox6.BackgroundImage = Properties.Resources.bat_empty;
 
-            
+            if (readElapseTime > 100 & readElapseTime < 10000)
+            {
+                ReadElapseTimer.Interval = readElapseTime;
+            }
+            else
+            {
+                MessageBox.Show("Incorrect timer value. Please check configuration and restart aplication" + Environment.NewLine + "The value must be more than 100ms and less than 10000ms" + Environment.NewLine + "Current value - " + readElapseTime.ToString());
+                Environment.Exit(0);
+            }
 
+            if (autorunProcess == 1)
+            {
+                main_process();
+                TimerEn.Checked = true;
+                ReadElapseTimer.Enabled = true;
+            }
         }
 
 
@@ -95,74 +113,171 @@ namespace TeslaBMSReader
             TimeLbl.Text = DateTime.Now.ToString();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            byte[] data = { 63, 60, 165 }; //              63 60 165 > 126 60 165 > 127 60 165 + 87
-            byte[] data1 = { 0, 59, 129 }; // crc - 139 |  0 59 129 >  0 59 129 >  1 59 129 + 139
-            byte[] data2 = { 1, 48, 61 };// crc - 247   |  1 48 61 > 2 48 61 > 3 48 61 + 247
-            byte[] data3 = { 1, 49, 3 };// crc - 88     |  1 49 3 > 2 49 3 > 3 49 3 + 88
 
-            int[] cells_voltage = { 3880, 0, 0, 0, 0, 0 };
+
+        public void main_process()
+        {
+
+            if (!_port.IsOpen)
+            {
+                if (!OpenPort())
+                {
+                    MessageBox.Show($"The serial port - {SerialPort} does not exist or busy by another application.\nPlease check it and open application again");
+                    Environment.Exit(0);
+                }
+
+                Thread.Sleep(50);
+                BatIdLabel.Text = "BMS ID: 0x" + bat_pack_address.ToString("X2");
+                serialTx(new byte[] { BROADCAST, RESET, 0xA5 }, true);
+
+                serialTx(new byte[] { 0x00, ADDRESS_CONTROL, (byte)(bat_pack_address | write_modifier) }, true);
+                serialTx(new byte[] { bat_pack_address, ADC_CONTROL, 0x3d }, true);
+                serialTx(new byte[] { bat_pack_address, IO_CONRTOL, 0x03 }, true);
+            }
+            if (batteryBalancingRequest.Checked)
+            {
+                serialTx(new byte[] { bat_pack_address, ALERT_STATUS, 0x80 }, true);
+                serialTx(new byte[] { bat_pack_address, ALERT_STATUS, 0x00 }, true);
+                serialTx(new byte[] { bat_pack_address, ALERT_STATUS, 0x08 }, true);
+                serialTx(new byte[] { bat_pack_address, ALERT_STATUS, 0x00 }, true);
+
+                serialTx(new byte[] { bat_pack_address, CB_TIME, 0x02 }, true);
+                serialTx(new byte[] { bat_pack_address, CB_CTRL, 0x01 }, true);
+
+                batteryBalancingRequest.Checked = false;
+            }
+
+            int[] cells_voltage = { 0, 0, 0, 0, 0, 0 };
             double[] aditional_data = { 0, 0, 0 };                                       //Battery voltage, TS1, TS2 
 
 
             byte[] startADC = { 1, 52, 1 };// crc - 88     |  > 3 52 1 23
             byte[] readADC = { 1, 1, 17 };// crc - 88     |  > 3 1 17 223
 
-            //var returnData = WriteDataToPort(data);
-            //MessageBox.Show(returnData.ToString());
-            string line1 = "";
-            string line2 = "";
-            string line3 = "";
-            string line4 = "";
-
             byte[] battery_read_data = serialTx(startADC, true);
-            
-            line1 = line1 + BitConverter.ToString(battery_read_data) + ";";   //127 60 165 58   - 87
-            Thread.Sleep(25);
+
+            Thread.Sleep(5);
             battery_read_data = serialTx(readADC, false);
-            line2 = line2 + BitConverter.ToString(battery_read_data) + ";";
 
             if ((battery_read_data[0] == 0x02 && battery_read_data[1] == 0x01 && battery_read_data[2] == 0x11)) //02-01-11
             {
+
+                int[] aditional_data_numbers = { 3, 17, 17 }; //I have some problem in secon TS channe. In this case data from channel 1 shared to ch2
+                byte byteIndex = 0;
+
+                foreach (int n in aditional_data_numbers)
+                {
+                    double tmp_data = 0.0;
+                    try
+                    {
+                        if (n == 3)
+                        {
+                            tmp_data = Math.Round((battery_read_data[n] * 256 + battery_read_data[n + 1]) * 33.333 / 16383, 3);
+                            aditional_data[byteIndex] = Convert.ToInt32(tmp_data * 1000);
+                        }
+                        else
+                        {
+                            tmp_data = ((battery_read_data[n] * 256 + battery_read_data[n + 1]) / 8);
+                            aditional_data[byteIndex] = Convert.ToInt32(tmp_data - 400);
+                        }
+
+
+                        byteIndex++;
+
+                    }
+                    catch
+                    {
+                        //Need to make error handler
+                    }
+                }
+
                 int[] numbers = { 5, 7, 9, 11, 13, 15 };
                 byte cellIndex = 0;
                 foreach (int n in numbers)
                 {
-                    double voltage = Math.Round((battery_read_data[n] * 256 + battery_read_data[n + 1]) * 6.250 / 16383, 3);
-                    cells_voltage[cellIndex] = Convert.ToInt32(voltage * 1000);
-                    cellIndex++;
+                    try
+                    {
 
-                    line3 = line3 + "Cell voltage: " + voltage.ToString("F3") + Environment.NewLine;
+                        double voltage = Math.Round((battery_read_data[n] * 256 + battery_read_data[n + 1]) * 6.250 / 16383, 3);
+                        cells_voltage[cellIndex] = Convert.ToInt32(voltage * 1000);
+                        cellIndex++;
+
+
+                    }
+                    catch
+                    {
+                        //Need to make error handler
+                    }
+
                 }
                 drav_display(cells_voltage, aditional_data);
             }
-            else
-            {
-                line3 = "something else";
-            }//
-
-
-            textBox1.Text = line1 + Environment.NewLine;
-            textBox1.AppendText(line2 + Environment.NewLine);
-            textBox1.AppendText(line3 + Environment.NewLine);
-            textBox1.AppendText(line4 + Environment.NewLine);
 
         }
 
-        public void drav_display(int[] cells_data , double[] extra_data)
+        public void drav_display(int[] cells_data, double[] extra_data)
         {
             CellVoltage1.Text = cells_data[0].ToString("D4") + "mV";
-            CellVoltage2.Text = cells_data[1].ToString("D4") + "mV";
-            CellVoltage3.Text = cells_data[2].ToString("D4") + "mV";
-            CellVoltage4.Text = cells_data[3].ToString("D4") + "mV";
-            CellVoltage5.Text = cells_data[4].ToString("D4") + "mV";
-            CellVoltage6.Text = cells_data[5].ToString("D4") + "mV";
+            if (cells_data[0] > cellMaxVoltage || cells_data[0] < cellMinVoltage)
+            {
+                CellVoltage1.ForeColor = Color.Red;
+            }
+            else
+            {
+                CellVoltage1.ForeColor = Color.DarkGreen;
+            }
 
-            //for (int i = 0; i <= 5; i++)
-            //{
-            //    textBox1.AppendText(cells_data[i].ToString() + "; " + PercentCalc(cells_data[i]).ToString() + Environment.NewLine);
-            //}
+            CellVoltage2.Text = cells_data[1].ToString("D4") + "mV";
+            if (cells_data[1] > cellMaxVoltage || cells_data[1] < cellMinVoltage)
+            {
+                CellVoltage2.ForeColor = Color.Red;
+            }
+            else
+            {
+                CellVoltage2.ForeColor = Color.DarkGreen;
+            }
+
+            CellVoltage3.Text = cells_data[2].ToString("D4") + "mV";
+            if (cells_data[2] > cellMaxVoltage || cells_data[2] < cellMinVoltage)
+            {
+                CellVoltage3.ForeColor = Color.Red;
+            }
+            else
+            {
+                CellVoltage3.ForeColor = Color.DarkGreen;
+            }
+
+
+            CellVoltage4.Text = cells_data[3].ToString("D4") + "mV";
+            if (cells_data[3] > cellMaxVoltage || cells_data[3] < cellMinVoltage)
+            {
+                CellVoltage4.ForeColor = Color.Red;
+            }
+            else
+            {
+                CellVoltage4.ForeColor = Color.DarkGreen;
+            }
+
+            CellVoltage5.Text = cells_data[4].ToString("D4") + "mV";
+            if (cells_data[4] > cellMaxVoltage || cells_data[4] < cellMinVoltage)
+            {
+                CellVoltage5.ForeColor = Color.Red;
+            }
+            else
+            {
+                CellVoltage5.ForeColor = Color.DarkGreen;
+            }
+
+
+            CellVoltage6.Text = cells_data[5].ToString("D4") + "mV";
+            if (cells_data[5] > cellMaxVoltage || cells_data[5] < cellMinVoltage)
+            {
+                CellVoltage6.ForeColor = Color.Red;
+            }
+            else
+            {
+                CellVoltage6.ForeColor = Color.DarkGreen;
+            }
 
             batFullBox1.Height = batEmptyBox1.Height - PercentCalc(cells_data[0]) * 2;
             batFullBox2.Height = batEmptyBox1.Height - PercentCalc(cells_data[1]) * 2;
@@ -173,7 +288,16 @@ namespace TeslaBMSReader
 
             MaximumVal.Text = "MAX: " + cells_data.Max() + "mV";
             MinimumVal.Text = "MIN: " + cells_data.Min() + "mV";
+
             DifferenceVal.Text = "DIFF: " + (cells_data.Max() - cells_data.Min()) + "mV";
+            if (disbalanceCriticalValue < (cells_data.Max() - cells_data.Min()))
+            {
+                DifferenceVal.ForeColor = Color.Red;
+            }
+            else
+            {
+                DifferenceVal.ForeColor = Color.DarkGreen;
+            }
 
             if (extra_data[0] != 0)
                 BatVoltage.Text = "BAT: " + (extra_data[0] / 1000).ToString("F1") + "V";
@@ -196,7 +320,6 @@ namespace TeslaBMSReader
                 Array.Resize(ref data, data.Length + 1);
                 data[data.Length - 1] = crc;
             }
-
             return WriteDataToPort(data);
 
         }
@@ -229,22 +352,22 @@ namespace TeslaBMSReader
             }
         }
 
-
         //Serial console section
 
-        private void OpenPort()
+        private bool OpenPort()
         {
             try
             {
                 _port.Open();
-                button1.BackColor = Color.Lime;
+
+                return true;
             }
             catch (IOException ex)
             {
-                button1.BackColor = Color.Red;
+
+                return false;
             }
         }
-
 
         private byte[] WriteDataToPort(byte[] data)
         {
@@ -282,7 +405,15 @@ namespace TeslaBMSReader
             }
         }
 
+        private void TimerEn_CheckedChanged(object sender, EventArgs e)
+        {
+            ReadElapseTimer.Enabled = TimerEn.Checked;
 
+        }
 
+        private void ReadElapseTimer_Tick(object sender, EventArgs e)
+        {
+            main_process();
+        }
     }
 }

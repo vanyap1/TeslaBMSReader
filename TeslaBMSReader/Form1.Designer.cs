@@ -2,15 +2,9 @@
 {
     partial class MainForm
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -47,7 +41,6 @@
             CellVoltage4 = new Label();
             CellVoltage5 = new Label();
             CellVoltage6 = new Label();
-            textBox1 = new TextBox();
             MaximumVal = new Label();
             MinimumVal = new Label();
             DifferenceVal = new Label();
@@ -64,11 +57,12 @@
             toolStripMenuItem2 = new ToolStripMenuItem();
             TimerEn = new CheckBox();
             groupBox3 = new GroupBox();
-            button1 = new Button();
-            checkBox1 = new CheckBox();
-            BaIdLabel = new Label();
+            batteryBalancingRequest = new CheckBox();
+            BatIdLabel = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
             TimeLbl = new Label();
+            ReadElapseTimer = new System.Windows.Forms.Timer(components);
+            checkBox1 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)batEmptyBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)batEmptyBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)batEmptyBox3).BeginInit();
@@ -256,14 +250,6 @@
             CellVoltage6.TabIndex = 17;
             CellVoltage6.Text = "null";
             // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(12, 437);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(668, 155);
-            textBox1.TabIndex = 18;
-            // 
             // MaximumVal
             // 
             MaximumVal.AutoSize = true;
@@ -288,6 +274,7 @@
             // 
             DifferenceVal.AutoSize = true;
             DifferenceVal.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            DifferenceVal.ForeColor = Color.DarkGreen;
             DifferenceVal.Location = new Point(6, 83);
             DifferenceVal.Name = "DifferenceVal";
             DifferenceVal.Size = new Size(78, 32);
@@ -398,11 +385,12 @@
             TimerEn.TabIndex = 28;
             TimerEn.Text = "Continue read data";
             TimerEn.UseVisualStyleBackColor = true;
+            TimerEn.CheckedChanged += TimerEn_CheckedChanged;
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(button1);
             groupBox3.Controls.Add(checkBox1);
+            groupBox3.Controls.Add(batteryBalancingRequest);
             groupBox3.Controls.Add(TimerEn);
             groupBox3.Location = new Point(461, 307);
             groupBox3.Name = "groupBox3";
@@ -411,36 +399,26 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Controlls";
             // 
-            // button1
+            // batteryBalancingRequest
             // 
-            button1.Location = new Point(9, 72);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 30;
-            button1.Text = "Init reader";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            batteryBalancingRequest.AutoSize = true;
+            batteryBalancingRequest.Location = new Point(9, 47);
+            batteryBalancingRequest.Name = "batteryBalancingRequest";
+            batteryBalancingRequest.Size = new Size(125, 19);
+            batteryBalancingRequest.TabIndex = 29;
+            batteryBalancingRequest.Text = "Start Bat balancing";
+            batteryBalancingRequest.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // BatIdLabel
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(9, 47);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(136, 19);
-            checkBox1.TabIndex = 29;
-            checkBox1.Text = "Start BMS calibration";
-            checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // BaIdLabel
-            // 
-            BaIdLabel.AutoSize = true;
-            BaIdLabel.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            BaIdLabel.ForeColor = SystemColors.Highlight;
-            BaIdLabel.Location = new Point(9, 25);
-            BaIdLabel.Name = "BaIdLabel";
-            BaIdLabel.Size = new Size(141, 30);
-            BaIdLabel.TabIndex = 25;
-            BaIdLabel.Text = "BMS ID: N/A ";
+            BatIdLabel.AutoSize = true;
+            BatIdLabel.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            BatIdLabel.ForeColor = SystemColors.Highlight;
+            BatIdLabel.Location = new Point(9, 25);
+            BatIdLabel.Name = "BatIdLabel";
+            BatIdLabel.Size = new Size(141, 30);
+            BatIdLabel.TabIndex = 25;
+            BatIdLabel.Text = "BMS ID: N/A ";
             // 
             // timer1
             // 
@@ -458,17 +436,31 @@
             TimeLbl.TabIndex = 31;
             TimeLbl.Text = "time";
             // 
+            // ReadElapseTimer
+            // 
+            ReadElapseTimer.Interval = 1000;
+            ReadElapseTimer.Tick += ReadElapseTimer_Tick;
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(9, 72);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(86, 19);
+            checkBox1.TabIndex = 30;
+            checkBox1.Text = "Save logfile";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(692, 595);
+            ClientSize = new Size(692, 433);
             Controls.Add(TimeLbl);
-            Controls.Add(BaIdLabel);
+            Controls.Add(BatIdLabel);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
-            Controls.Add(textBox1);
             Controls.Add(CellVoltage6);
             Controls.Add(CellVoltage5);
             Controls.Add(CellVoltage4);
@@ -489,7 +481,7 @@
             Controls.Add(batEmptyBox1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            MaximumSize = new Size(708, 634);
+            MaximumSize = new Size(708, 472);
             MinimumSize = new Size(708, 472);
             Name = "MainForm";
             Text = "Tesla BMB Single cell reader";
@@ -538,7 +530,6 @@
         private Label CellVoltage4;
         private Label CellVoltage5;
         private Label CellVoltage6;
-        private TextBox textBox1;
         private Label MaximumVal;
         private Label MinimumVal;
         private Label DifferenceVal;
@@ -555,10 +546,11 @@
         private ToolStripMenuItem toolStripMenuItem2;
         private CheckBox TimerEn;
         private GroupBox groupBox3;
-        private CheckBox checkBox1;
-        private Label BaIdLabel;
+        private CheckBox batteryBalancingRequest;
+        private Label BatIdLabel;
         private System.Windows.Forms.Timer timer1;
         private Label TimeLbl;
-        private Button button1;
+        private System.Windows.Forms.Timer ReadElapseTimer;
+        private CheckBox checkBox1;
     }
 }
