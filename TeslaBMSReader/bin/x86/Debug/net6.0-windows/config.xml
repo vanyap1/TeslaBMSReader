@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="SerialPort" value="Com9"/>
+    <add key="BaudRate" value="612500"/>
+	<add key="autorun" value="1"/>
+    <add key="readElapseTime" value="1000"/>
+	<add key="OwnerInfo" value="Ivan Prints (https://github.com/vanyap1)"/>
+	
+	<add key="disbalanceCriticalValue" value="100"/>
+	<add key="cellMaxVoltage" value="4200"/>
+	<add key="cellMinVoltage" value="3600"/>
+	
+	
+  </appSettings>
+</configuration>

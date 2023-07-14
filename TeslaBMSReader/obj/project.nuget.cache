@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "iSTVU8TswZejbmsIHy52VrHlgHNe9wsYLUa9vLQg/gsFsA3EkUitkD/BAIERceEemuKqCIE8Xyz7lFqHzBo8eQ==",
+  "dgSpecHash": "WJb/SO3g8O6k6n1RGcdmHVxvLrWHESUBxt0OgzjyUfFog53Dbtu3s41SF4QpS8aLCXI/gaW/Kjaez1iIUe0H6g==",
   "success": true,
-  "projectFilePath": "G:\\GIT\\TeslaBMSReader\\TeslaBMSReader\\TeslaBMSReader.csproj",
+  "projectFilePath": "C:\\Users\\Ivan Prints\\Desktop\\git\\TeslaBMSReader\\TeslaBMSReader\\TeslaBMSReader.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\princ\\.nuget\\packages\\runtime.linux-arm.runtime.native.system.io.ports\\7.0.0\\runtime.linux-arm.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
-    "C:\\Users\\princ\\.nuget\\packages\\runtime.linux-arm64.runtime.native.system.io.ports\\7.0.0\\runtime.linux-arm64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
-    "C:\\Users\\princ\\.nuget\\packages\\runtime.linux-x64.runtime.native.system.io.ports\\7.0.0\\runtime.linux-x64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
-    "C:\\Users\\princ\\.nuget\\packages\\runtime.native.system.io.ports\\7.0.0\\runtime.native.system.io.ports.7.0.0.nupkg.sha512",
-    "C:\\Users\\princ\\.nuget\\packages\\runtime.osx-arm64.runtime.native.system.io.ports\\7.0.0\\runtime.osx-arm64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
-    "C:\\Users\\princ\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\7.0.0\\runtime.osx-x64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
-    "C:\\Users\\princ\\.nuget\\packages\\system.io.ports\\7.0.0\\system.io.ports.7.0.0.nupkg.sha512"
+    "C:\\Users\\Ivan Prints\\.nuget\\packages\\runtime.linux-arm.runtime.native.system.io.ports\\7.0.0\\runtime.linux-arm.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\Ivan Prints\\.nuget\\packages\\runtime.linux-arm64.runtime.native.system.io.ports\\7.0.0\\runtime.linux-arm64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\Ivan Prints\\.nuget\\packages\\runtime.linux-x64.runtime.native.system.io.ports\\7.0.0\\runtime.linux-x64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\Ivan Prints\\.nuget\\packages\\runtime.native.system.io.ports\\7.0.0\\runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\Ivan Prints\\.nuget\\packages\\runtime.osx-arm64.runtime.native.system.io.ports\\7.0.0\\runtime.osx-arm64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\Ivan Prints\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\7.0.0\\runtime.osx-x64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
+    "C:\\Users\\Ivan Prints\\.nuget\\packages\\system.io.ports\\7.0.0\\system.io.ports.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }
